@@ -14,17 +14,13 @@ class Settings(BaseSettings):
     amqp_host: str
     amqp_uri: str
 
-    mail_username: str
+    mail_login: str
     mail_password: str
-    mail_from: str
-    mail_port: int
-    mail_server: str
-    mail_tls: bool
-    mail_ssl: bool
-    use_credentials: bool
-    validate_certs: bool
 
     notification_email: str
+
+    slack_channel_id: str
+    slack_bot_oauth_token: str
 
     class Config:
         env_file = ".env"

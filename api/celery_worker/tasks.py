@@ -1,13 +1,13 @@
+import logging
+
 from celery import Task
 
 from .celery import app
 from db.database import db_session
-from settings import get_settings
+from notifications.notification_email import send_email_notification
+from notifications.notification_slack import send_slack_notification
 
-
-app_settings = get_settings()
-
-NOTIFICATION_EMAIL = app_settings.notification_email
+logging.getLogger(__name__)
 
 
 class SQLAlchemyTask(Task):
@@ -24,8 +24,16 @@ class SQLAlchemyTask(Task):
 @app.task(name="scraping", base=SQLAlchemyTask)
 def scraping():
     try:
+        # remove 'pass' and call your scraping functions here
         pass
-        # call your scraping functions here
     except Exception as e:
-        pass
-        # notifications here
+        logging.error(e)
+        send_email_notification(f"""
+        Your scraping functions failed to succeed their job.
+        
+        Details: {e}
+        
+        For more info please visit logs files."""
+                                )
+        send_slack_notification(f":rotating_light: *SCRAPING FAIL* \n:scroll: Details: {e} "
+                                f"\n:information_source: For more info please visit logs files.")

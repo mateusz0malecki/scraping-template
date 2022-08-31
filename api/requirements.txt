@@ -22,3 +22,7 @@ python-dotenv==0.20.0
 # async background worker
 celery==5.2.7
 flower==1.2.0
+
+# slack messages
+slack_sdk==3.18.1
+
